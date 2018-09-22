@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 
@@ -8,15 +8,18 @@ public class PlayerController : MonoBehaviour
     public float speed;
     public Text countText;
     public Text winText;
+    public Text scoreText;
 
     private Rigidbody rb;
     private int count;
+    private int score;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         count = 0;
-        SetCountText();
+        score = 0;
+        SetAllText();
         winText.text = "";
     }
 
@@ -41,17 +44,26 @@ public class PlayerController : MonoBehaviour
         if (other.gameObject.CompareTag("Pick Up"))
         {
             other.gameObject.SetActive(false);
-            count = count + 1;
-            SetCountText();
+            count += 1;
+            score += 1;
+            SetAllText();
+        }
+
+        else if (other.gameObject.CompareTag("Enemy"))
+        {
+            other.gameObject.SetActive(false);
+            score -= 1;
+            SetAllText();
         }
     }
 
-    void SetCountText()
+    void SetAllText()
     {
         countText.text = "Count: " + count.ToString();
-        if (count >= 9)
+        scoreText.text = "Score: " + score.ToString();
+        if (count >= 8)
         {
-            winText.text = "You Win!";
+            winText.text = "You finished with a score of: " + score.ToString();
         }
     }
 }
